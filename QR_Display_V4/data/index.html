@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital QR Code Badge</title>
+
+    <style>
+        div {
+            display: flex;
+            flex-wrap: wrap;
+            align-content: center;
+            text-align: center;
+            justify-content: center;
+            }
+        .button {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            margin: 5px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 10px;
+            }
+        input[type=text] {
+            width: 80%;
+            padding: 15px 22px;
+            margin: 10px 5px;
+            box-sizing: content-box;              
+            font-size: 18px;
+            }
+    </style>
+</head>
+<body>
+    <div class="heading" style="height:50px">
+        <h2>Digital QR Code Badge</h2>
+    </div>
+    <div class="field_title" style="height:30px">
+        <h3>QR Data</h3>
+    </div>
+    <div class="input_field">
+        <input type="text" id="QRData" name="QRData" >
+    </div>
+    <div class="submit_btn" >
+        <input class="button" type="submit" value="Submit" id="QRDataSubmit" onclick="SubmitQR(0)">
+    </div>
+    <div style="margin:5px">
+        <input class="button 1" type="button" value="Instructables" id="QRDataSubmit" onclick="SubmitQR(1)" style="background-color: #395998;">
+        <input class="button 2" type="button" value="Youtube" id="QRDataSubmit" onclick="SubmitQR(2)" style="background-color: #c4302b;">
+        <input class="button 3" type="button" value="Instagram" id="QRDataSubmit" onclick="SubmitQR(3)" style="background-color: #dd2a7b;">
+        <input class="button 4" type="button" value="LinkedIn" id="QRDataSubmit" onclick="SubmitQR(4)" style="background-color: #0e76a8;">
+    </div>
+    <div>
+        <input class="button 5" type="button" value="Edit Links" id="editPageBtn" onclick="loadEditPage()" style="background-color: #dadada; color: #000;">
+    </div>
+
+    <script>
+        var fetch_data = getJSON();
+        var mydata;
+        fetch_data.then(data => {   console.log(data);
+                                document.getElementById("QRData").value = data["default"];
+                                mydata = data;    
+                })
+
+        function SubmitQR(link = 0){
+            console.log(link);
+            if (link == 1) {
+                window.location.href = window.location.origin + "/QR?Data=" + mydata["Instructables"]
+            }else if(link == 2){
+                window.location.href = window.location.origin + "/QR?Data=" + mydata["Youtube"]
+            }
+            else if(link == 3){
+                window.location.href = window.location.origin + "/QR?Data=" + mydata["Instagram"]
+            }
+            else if(link == 4){
+                window.location.href = window.location.origin + "/QR?Data=" + mydata["LinkedIn"]
+            }else{
+                window.location.href = window.location.origin + "/QR?Data="+document.getElementById("QRData").value;
+            }
+        }
+
+        function loadEditPage(){
+            window.location.href = window.location.origin + "/edit";
+
+        }
+        async function getJSON() {
+            let url = '/config.json';
+            try {
+                let res = await fetch(url);
+                return await res.json();
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    </script>
+</body>
+</html>

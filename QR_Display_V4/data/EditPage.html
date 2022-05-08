@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital QR Code Badge</title>
+
+    <style>
+        div {
+            display: flex;
+            flex-wrap: wrap;
+            align-content: center;
+            text-align: center;
+            justify-content: center;
+            padding: 2px 2px;
+            }
+        .button {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            margin: 5px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 10px;
+            }
+        input[type=text] {
+            width: 60%;
+            padding: 10px 15px;
+            margin: 5px 3px;
+            box-sizing: content-box;              
+            font-size: 15px;
+            }
+        .Field_Header{
+            text-align: left;
+            padding: 5px 3px;
+            margin: 5px 0px;
+            width: 20%;
+            display: table-cell;;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <div class="heading" style="height:50px">
+        <h2>Digital QR Code Badge</h2>
+    </div>
+    <div class="field_title" style="height:30px">
+        <h3>Config Data</h3>
+    </div>
+    <div class="input_field">
+        <h4 class="Field_Header">Instructables Link</h4>
+        <input type="text" id="InstructablesField" name="Instructables">
+    </div>
+    <div class="input_field">
+        <h4 class="Field_Header">Youtube Link</h4>
+        <input type="text" id="YoutubeField" name="Youtube">
+    </div>
+    <div class="input_field">
+        <h4 class="Field_Header">Instagram Link</h4>
+        <input type="text" id="InstagramField" name="Instagram">
+    </div>
+    <div class="input_field">
+        <h4 class="Field_Header">LinkedIn Link</h4>
+        <input type="text" id="LinkedInField" name="LinkedIn">
+    </div>
+    <div class="submit_btn" >
+        <input class="button" type="submit" value="Submit" id="QRDataSubmit" onclick="SendData()">
+    </div>
+    
+    <script>
+        var fetch_data = getJSON();
+        var mydata;
+        fetch_data.then(data => {   console.log(data);
+                                mydata = data;  
+                                updateFields();  
+                })
+
+        function SendData(){
+            let url = window.location.origin + "/edit?Instructables=" + document.getElementById("InstructablesField").value
+                                        + "&Youtube=" + document.getElementById("YoutubeField").value
+                                        + "&Instagram=" + document.getElementById("InstagramField").value
+                                        + "&LinkedIn=" + document.getElementById("LinkedInField").value
+            console.log(url);
+            fetch(url).then(res=>{console.log(res);});
+        }
+
+        function updateFields(){
+            document.getElementById("InstructablesField").value = mydata["Instructables"];
+            document.getElementById("YoutubeField").value = mydata["Youtube"];
+            document.getElementById("InstagramField").value = mydata["Instagram"];
+            document.getElementById("LinkedInField").value = mydata["LinkedIn"];
+        }
+        async function getJSON() {
+            let url = '/config.json';
+            try {
+                let res = await fetch(url);
+                return await res.json();
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    </script>
+</body>
+</html>
